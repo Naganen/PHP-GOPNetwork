@@ -1,5 +1,8 @@
 <?php
     include('function.php');
+    if ($_COOKIE['login'] == null) {
+        Redirect("index.php");
+    }
     $deleteid = $_GET['id'];
       
         $deleteid = stripcslashes($deleteid);  

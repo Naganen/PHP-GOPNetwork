@@ -21,6 +21,8 @@
                 Redirect("register.php?result=passNotMatch");
             } elseif (strlen($username) > 15 || strlen($username) < 5 || strlen($password) > 15 || strlen($password) < 5) {
                 Redirect("register.php?result=creditendalLenght");
+            } elseif (preg_match("/([%\$#\*]+)/", $username)) {
+                Redirect("register.php?result=specialChar");
             } else {
                 $passhash = password_hash($password, PASSWORD_DEFAULT);
                 $sql = "INSERT INTO `users`(`username`, `password`, `usertoken`) VALUES ('$username', '$passhash', '$usertoken')";
