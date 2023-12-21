@@ -1,6 +1,0 @@
-<?php
-$url = basename('http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
-if ($url == 'user.php') {
-echo var_dump($url);
-}
-?>
