@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "gopweett_naganen";
-$password = "11894730294Ay#";
-$dbname = "gopweett_db";
+$username = "uname";
+$password = "pass";
+$dbname = "dbname";
 $con = mysqli_connect($servername, $username, $password, $dbname);
 
 function Redirect($url)
@@ -172,11 +172,14 @@ function PostHTML($post, $logined, $userid)
     $likers = array_filter(explode(",", $post["likedusers"]));
     $likecount = count($likers);
 
+    $seenusers = array_filter(explode(",", $post["seenusers"]));
+    $seencount = count($seenusers);
+
     $censor = $logined['censorswear'];
 
 
     if ($post['related'] == 0) {
-        echo "<div class='card mt-3 p-3'><p class='text-start'>" .
+        echo "<div class='card mt-3 p-3 gonderi' id='{$post['id']}'><p class='text-start'>" .
             "<a class='btn btn-dark' href='@" . CheckUser($post['publisher'], $con)['username'] . "'>" .
             "<img onerror='this.onerror=null; this.src=\"pp.jpg\";' tite='Kullanıcının Profil Resmi' class='rounded-circle' width='32px' height='32px' src='" . CheckUser($post['publisher'], $con)['profilepic'] . "'/>" .
             "<span class='m-3'>";
@@ -186,13 +189,6 @@ function PostHTML($post, $logined, $userid)
         }
         echo "</span></a>";
 
-        if ($post['publisher'] != $userid) {
-            if (CheckFollowing($userid, $post['publisher'])) {
-                echo "<a class='btn btn-dark float-end' href='tool_follow.php?who={$post['publisher']}&from=home.php&post={$post['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-xmark'></i></a>";
-            } else {
-                echo "<a style='background-color: #E95793;' class='btn btn-dark float-end' href='tool_follow.php?who={$post['publisher']}&from=home.php&post={$post['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-plus'></i></a>";
-            }
-        }
 
         echo "</p><p class='ms-4 me-4 text-start'>";
         echo ($censor) ? ShowHashtag(CensorSwear($post['post'])) : ShowHashtag($post['post']);
@@ -210,7 +206,7 @@ function PostHTML($post, $logined, $userid)
         <span id='likecount-{$post['id']}'>{$likecount}</span></a>";
 
         echo "<a title='Yorumlar' href='post.php?post={$post['id']}' class='btn btn-dark'><i class='fa-solid fa-comment-dots'></i></a>";
-        //echo "<span title='Görüntüleme Sayısı' class='btn'><i class='fa-solid fa-eye'></i> " . $seenusers . "</span>";
+        echo "<span title='Görüntüleme Sayısı' class='btn'><i class='fa-solid fa-eye'></i> " . $seencount . "</span>";
         if (IsModerator($userid, $con) or $logined['usertoken'] == $post['publisher']) {
             echo "<a title='Gönderiyi Sil' class='text-decoration-none btn btn-dark float-end' href='tool_delete.php?id={$post['id']}'><i class='fas fa-trash'></i></a>";
         }
@@ -220,7 +216,7 @@ function PostHTML($post, $logined, $userid)
 
         // RelatedPost
 
-        echo "<div class='card mt-3 p-3' id='{$post['id']}' data-id='{$post['id']}'>";
+        echo "<div class='card mt-3 p-3 gonderi' id='{$post['id']}' data-id='{$post['id']}'>";
         if ($related != null) {
             echo "<div class='card mb-3 p-3 bg-dark' style='cursor: pointer;' onclick='location.href=\"post.php?post={$related['id']}\"'>";
             echo "<p class='text-start'>";
@@ -234,13 +230,6 @@ function PostHTML($post, $logined, $userid)
             }
             echo "</span></a>";
 
-            if ($related['publisher'] != $userid) {
-                if (CheckFollowing($userid, $related['publisher'])) {
-                    echo "<a class='btn btn-dark float-end' href='tool_follow.php?who={$related['publisher']}&from=home.php&post={$related['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-xmark'></i></a>";
-                } else {
-                    echo "<a style='background-color: #E95793;' class='btn btn-dark float-end' href='tool_follow.php?who={$related['publisher']}&from=home.php&post={$related['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-plus'></i></a>";
-                }
-            }
 
             echo "</p><p class='ms-4 me-4 text-start'>";
             echo ($censor) ? ShowHashtag(CensorSwear($related['post'])) : ShowHashtag($related['post']);
@@ -265,14 +254,6 @@ function PostHTML($post, $logined, $userid)
         }
         echo "</span></a>";
 
-        if ($post['publisher'] != $userid) {
-            if (CheckFollowing($userid, $post['publisher'])) {
-                echo "<a class='btn btn-dark float-end' href='tool_follow.php?who={$post['publisher']}&from=home.php&post={$post['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-xmark'></i></a>";
-            } else {
-                echo "<a style='background-color: #E95793;' class='btn btn-dark float-end' href='tool_follow.php?who={$post['publisher']}&from=home.php&post={$post['id']}&sort={$_GET['sort']}'><i class='fa-solid fa-plus'></i></a>";
-            }
-        }
-
         echo "</p><p class='ms-4 me-4 text-start'>";
         echo ($censor) ? ShowHashtag(CensorSwear($post['post'])) : ShowHashtag($post['post']);
 
@@ -290,7 +271,7 @@ function PostHTML($post, $logined, $userid)
             <span id='likecount-{$post['id']}'>{$likecount}</span></a>";
 
         echo "<a title='Yorumlar' href='post.php?post={$post['id']}' class='btn btn-dark'><i class='fa-solid fa-comment-dots'></i></a>";
-        //echo "<span title='Görüntüleme Sayısı' class='btn'><i class='fa-solid fa-eye'></i> " . $seenusers . "</span>";
+        echo "<span title='Görüntüleme Sayısı' class='btn'><i class='fa-solid fa-eye'></i> " . $seencount . "</span>";
 
         if (IsModerator($userid, $con) or $logined['usertoken'] == $post['publisher']) {
             echo "<a title='Gönderiyi Sil' class='text-decoration-none btn btn-dark float-end' href='tool_delete.php?id={$post['id']}'><i class='fas fa-trash'></i></a>";

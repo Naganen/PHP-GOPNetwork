@@ -28,6 +28,12 @@ if ($post != null && CheckUser($publisher, $con)['usertoken'] == $publisher && s
     $result = mysqli_query($con, $sql);
 }
 
-Redirect("home.php");
+if ($related != 0) {
+    Redirect("post.php?post=".$related);
+} else {
+    Redirect("home.php");
+}
+
+
 
 ?>

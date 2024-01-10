@@ -116,3 +116,32 @@ function LikeButton(userid, post) {
     xmlhttp.open("GET", "tool_like.php?postid=" + post + "&userid=" + userid, true);
     xmlhttp.send();
 }
+
+let posts = Array.from(document.getElementsByClassName("gonderi"));
+let alreadySeen = [];
+
+window.onscroll = function () {
+    if (posts != null) {
+        posts.forEach(element => {
+            if (checkVisible(element)) {
+                if (!alreadySeen.includes(element.id)) {
+                    alreadySeen.push(element.id);
+                    AddSeen(element.id);
+                }
+            }
+        });
+    }
+};
+
+function checkVisible(elm) {
+    var rect = elm.getBoundingClientRect();
+    var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+}
+
+
+function AddSeen(post) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "tool_seen.php?postid=" + post, true);
+    xmlhttp.send();
+}

@@ -12,11 +12,6 @@
         Redirect("index.php");
     }
 
-    $postcount = 10;
-
-    if ($_GET['p'] != null) {
-        $postcount = $_GET['p'] * 10;
-    }
     ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
